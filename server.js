@@ -8,11 +8,11 @@ const app = express();
 // Enable CORS for all origins
 app.use(cors());
 
-app.get('/mapbox/:style/:z/:x/:y', async (req, res) => {
-    const { style, z, x, y } = req.params;
-    const token = process.env.MAPBOX_TOKEN; // set your Mapbox token in Render secrets
-    const url = `https://api.mapbox.com/styles/v1/mapbox/${style}/tiles/256/${z}/${x}/${y}?access_token=${token}`;
-
+app.get('/mapbox/terrain-rgb/:z/:x/:y.png', async (req, res) => {
+    const { z, x, y } = req.params;
+    const token = process.env.MAPBOX_TOKEN;
+    const url = `https://api.mapbox.com/v4/mapbox.terrain-rgb/${z}/${x}/${y}.pngraw?access_token=${token}`;
+    
     try {
         const response = await fetch(url);
         const buffer = await response.arrayBuffer();
@@ -28,3 +28,4 @@ app.get('/', (req, res) => res.send('Mapbox proxy is running'));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
+
