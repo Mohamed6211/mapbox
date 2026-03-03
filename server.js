@@ -21,6 +21,9 @@ app.get("/mapbox/:style/:z/:x/:y", async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('Mapbox proxy is running');
+});
 app.get("/mapbox/*", async (req, res) => {
     try {
         const path = req.originalUrl.replace("/mapbox", "");
@@ -50,3 +53,4 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 
 });
+
