@@ -6,6 +6,20 @@ const PORT = process.env.PORT || 10000;
 
 // Store token in environment variable (NOT hardcoded)
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
+// server.js
+app.get("/mapbox/:style/:z/:x/:y", async (req, res) => {
+  const { style, z, x, y } = req.params;
+  const mapboxUrl = `https://api.mapbox.com/styles/v1/mapbox/${style}/tiles/256/${z}/${x}/${y}?access_token=${process.env.MAPBOX_TOKEN}`;
+  
+  try {
+    const response = await fetch(mapboxUrl);
+    const arrayBuffer = await response.arrayBuffer();
+    res.set('Content-Type', 'image/png');
+    res.send(Buffer.from(arrayBuffer));
+  } catch (err) {
+    res.status(500).send("Failed to fetch tile");
+  }
+});
 
 app.get("/mapbox/*", async (req, res) => {
     try {
@@ -34,4 +48,5 @@ app.get("/mapbox/*", async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+
 });
